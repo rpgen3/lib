@@ -89,8 +89,14 @@
         repeat: function(str, num){ // strをnum回繰り返した文字列を返す
             return new Array(num + 1).join(str);
         },
-        getTime: function(){ // xx:yy:zz の形式で現在時刻の文字列を返す
-            return new Date().toString().match(/[0-9]{2}:[0-9]{2}:[0-9]{2}/)[0];
+        getTime: function(n){ // xx:yy:zz の形式で現在時刻の文字列を返す
+            if(!n) return new Date().toString().match(/[0-9]{2}:[0-9]{2}:[0-9]{2}/)[0];
+            var d = new Date(n);
+            return [
+                d.getHours(),
+                d.getMinutes(),
+                d.getSeconds()
+            ].map(v=>('00' + v).slice(-2)).join(':');
         },
         getBrowser: function(){ // ブラウザの名前を取得
             var ua = window.navigator.userAgent.toLowerCase();
