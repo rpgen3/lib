@@ -93,7 +93,7 @@
             if(!n) return new Date().toString().match(/[0-9]{2}:[0-9]{2}:[0-9]{2}/)[0];
             var d = new Date(n);
             return [
-                d.getHours(),
+                d.getHours() - 9,
                 d.getMinutes(),
                 d.getSeconds()
             ].map(v=>('00' + v).slice(-2)).join(':');
