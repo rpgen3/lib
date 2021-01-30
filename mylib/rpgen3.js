@@ -407,6 +407,7 @@
     // ########################################################################################################
     // HTML要素を追加する, 関数の返り値は、入力値を返す関数
     rpgen3.addInputText = function(parentNode, param){ // 文字列入力欄を追加
+        param.value = String(param.value);
         var p = rpgen3.init(param,{
             id: '', // HTML
             class: '', // HTML
@@ -424,7 +425,6 @@
             readonly: false, // trueならユーザーは編集不可&クリック時全選択&コピー
             trim: true, // trueなら入力の両端の空白文字などを自動削除
         });
-        p.value = String(p.value);
         var elm = $(p.textarea ? "<textarea>" : "<input>");
         _setCommonInput(p, elm, parentNode);
         _setAttr(p, elm);
@@ -481,7 +481,6 @@
             width: '', // widthがこの値で固定
             readonly: false, // trueならユーザーは編集不可&クリック時全選択&コピー
         });
-        p.value = Number(p.value);
         var elm = $("<input>");
         _setCommonInput(p, elm, parentNode);
         _setAttr(p, elm);
@@ -527,7 +526,6 @@
             width: '', // widthがこの値で固定
             step: 1,
         });
-        p.value = Number(p.value);
         var elm = $("<input>").attr({
             type: "range",
             value: p.value,
@@ -592,6 +590,7 @@
     };
 
     rpgen3.addSelect = function(parentNode, param){ // 選択肢を追加
+        param.value = String(param.value);
         var p = rpgen3.init(param,{
             id: '', // HTML(select)
             class: '', // HTML(select)
@@ -603,7 +602,6 @@
             list: {}, // 選択肢の連想配列
             width: '', // widthがこの値で固定
         });
-        p.value = String(p.value);
         var elm = $("<select>");
         function getValue(){
             return elm.val() || '';
