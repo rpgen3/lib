@@ -452,7 +452,7 @@
             elm.val(v);
             if(p.save) rpgen3.save(p.save, v);
         }
-        elm.change(change);
+        elm.on("change", change);
         rpgen3.try(change);
 
         return function(){
@@ -500,7 +500,7 @@
             elm.val(v);
             if(p.save) rpgen3.save(p.save, v);
         }
-        elm.change(change);
+        elm.on("change", change);
         rpgen3.try(change);
 
         return function(){
@@ -545,7 +545,7 @@
             elm.val(v);
             if(p.save) rpgen3.save(p.save, v);
         }
-        elm.change(change);
+        elm.on("change", change);
         rpgen3.try(change);
 
         return function(){
@@ -614,7 +614,6 @@
             if(v) elm.val(v);
             if(Object.keys(p.list).map(v=>String(p.list[v])).indexOf(v) === -1) elm.val(elm.children().first().val());
         }
-        updateSelect();
         elm.hover(updateSelect).on('updateSelect', updateSelect);
 
         _setCommonInput(p, elm, parentNode);
@@ -628,8 +627,10 @@
             elm.val(v);
             if(p.save) rpgen3.save(p.save, v);
         }
-        elm.change(change);
+        elm.on("change", change);
         rpgen3.try(change);
+
+        updateSelect();
 
         return getValue;
     };
