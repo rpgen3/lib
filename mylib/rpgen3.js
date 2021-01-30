@@ -612,9 +612,10 @@
             if(p.placeholder !== '') $("<option>",{text:p.placeholder}).val('').hide().appendTo(elm);
             for(var k in p.list) $("<option>",{text:k}).val(String(p.list[k])).appendTo(elm);
             if(v) elm.val(v);
+            if(Object.keys(p.list).map(k=>p.list[k]).indexOf(v) === -1) p.val(elm.children().first().val());
         }
         updateSelect();
-        elm.hover(updateSelect).on('updateSelect', updateSelect); // 'updateSelect'イベントをtoggleなどで発火させると更新
+        elm.hover(updateSelect).on('updateSelect', updateSelect);
 
         _setCommonInput(p, elm, parentNode);
         _setAttr(p, elm);
