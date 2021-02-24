@@ -387,7 +387,7 @@
             if(e.key === 'Enter') p.enter();
         });
         if(p.readonly) {
-            elm.attr("readonly", true).click(function(){
+            elm.attr("readonly", true).on("click",function(){
                 rpgen3.copy(elm.val());
                 elm.select();
             }).css({
@@ -407,6 +407,7 @@
     // ########################################################################################################
     // HTML要素を追加する, 関数の返り値は、入力値を返す関数
     rpgen3.addInputText = function(parentNode, param){ // 文字列入力欄を追加
+        if(undefined === param.value) param.value = '';
         param.value = String(param.value);
         var p = rpgen3.init(param,{
             id: '', // HTML
@@ -563,7 +564,7 @@
             save: '', // 変更された値を保存する領域
         });
         var flag = !!p.value;
-        var elm = $("<button>").appendTo(parentNode).text(p.title).click(function(){
+        var elm = $("<button>").appendTo(parentNode).text(p.title).on("click",function(){
             flag = !flag;
             change();
         });
@@ -590,6 +591,7 @@
     };
 
     rpgen3.addSelect = function(parentNode, param){ // 選択肢を追加
+        if(undefined === param.value) param.value = '';
         param.value = String(param.value);
         var p = rpgen3.init(param,{
             id: '', // HTML(select)
@@ -664,7 +666,7 @@
         var btns = {}, activTabName;
         for(var k in p.list){
             (function(k){ // 関数スコープ
-                btns[k] = $("<button>").appendTo(h).text(k).click(function(){
+                btns[k] = $("<button>").appendTo(h).text(k).on("click",function(){
                     activTabName = k;
                     h.find("button").css("backgroundColor","gray");
                     $(this).css("backgroundColor","yellow");
