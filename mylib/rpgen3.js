@@ -645,10 +645,7 @@
         var front = $("<span>").appendTo(parentNode);
         var area = (p.elm || $("<div>")).appendTo(parentNode);
         p.change = function(flag){ // changeはこの関数が使うので設定しても反映されない
-            area[flag ? "show" : "hide"](p.speed);
-            setTimeout(function(){
-                $(window).resize();
-            }, p.speed);
+            area[flag ? "show" : "hide"](p.speed,()=>$(window).resize());
         }
         if(p.id2 !== '') area.attr('id', p.id2);
         if(p.class2 !== '') area.addClass(p.class2);
