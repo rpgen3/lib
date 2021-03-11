@@ -25,7 +25,10 @@
                 },
                 success: function(r){
                     const d = r.data;
-                    resolve(d.id, function(){ deleteFile(token, d.deletehash)});
+                    resolve({
+                        id: d.id,
+                        deleteFunc: function(){ deleteFile(token, d.deletehash) }
+                    });
                 },
                 error: reject
             });
