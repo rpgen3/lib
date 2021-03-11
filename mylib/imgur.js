@@ -19,7 +19,7 @@
         });
     }
     function upload(dataURL){
-        const token = 'Client-ID ' + rpgen3.randArray(["ed3688de8608b9d","8b35a3e16a802a6","9f6cbdf697dab0b"]);
+        const token = 'Client-ID ' + rpgen3.randArray(tokens);
         return new Promise((resolve, reject) => {
             $.ajax({
                 dataType: 'json',
@@ -32,17 +32,16 @@
                     image: dataURL
                 },
                 success: r =>{
-                    const d = r.data;
-                    resolve({
-                        id: d.id,
-                        deleteFunc: () => deleteFile(token, d.deletehash)
-                    });
+                    const d = r.data,
+                          id = d.id,
+                          dhash = d.deletehash;
+                    resolve({ token, id, dhash });
                 },
                 error: reject
             });
         });
     }
-    function deleteFile(token, dhash){
+    function del({token, dhash}){
         return new Promise((resolve, reject) => {
             $.ajax({
                 dataType: 'json',
@@ -51,12 +50,19 @@
                 },
                 url: "https://api.imgur.com/3/image/" + dhash,
                 type: "DELETE",
-                success: resolve
+                success: resolve,
+                error: reject
             });
         });
     }
     window.imgur = {
         load: load,
-        upload: upload
+        upload: upload,
+        delete: del
     };
+    const tokens = [
+        "ed3688de8608b9d",
+        "8b35a3e16a802a6",
+        "9f6cbdf697dab0b"
+    ];
 })(typeof window === 'object' ? window : this);
