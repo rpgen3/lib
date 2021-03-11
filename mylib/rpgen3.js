@@ -593,6 +593,13 @@
     rpgen3.addSelect = function(parentNode, param){ // 選択肢を追加
         if(undefined === param.value) param.value = '';
         param.value = String(param.value);
+        if(rpgen3.judgeType(p.list,"Array")){
+            var obj = {};
+            param.list.forEach(function(v){
+                obj[v] = v;
+            });
+            param.list = obj;
+        }
         var p = rpgen3.init(param,{
             id: '', // HTML(select)
             class: '', // HTML(select)
