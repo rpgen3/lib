@@ -1,16 +1,14 @@
-(function(window, undefined){
+((window, undefined) => {
     "use strict";
     function load(imgurID){
-        return new Promise(function(resolve, reject){
+        return new Promise((resolve, reject) => {
             const url = "https://i.imgur.com/" + imgurID + ".png";
-            new Promise(function(r){
+            new Promise(r => {
                 const xhr = new XMLHttpRequest();
-                xhr.onload = function(){
-                    /removed/.test(xhr.responseURL) ? reject() : r();
-                };
+                xhr.onload = () => /removed/.test(xhr.responseURL) ? reject() : r();
                 xhr.open('GET', url);
                 xhr.send();
-            }).then(function(){
+            }).then(() => {
                 $("<img>").on("error", reject).on("load", function(){
                     resolve(this);
                 }).attr({
@@ -22,7 +20,7 @@
     }
     function upload(dataURL){
         const token = 'Client-ID ' + rpgen3.randArray(["ed3688de8608b9d","8b35a3e16a802a6","9f6cbdf697dab0b"]);
-        return new Promise(function(resolve, reject){
+        return new Promise((resolve, reject) => {
             $.ajax({
                 dataType: 'json',
                 headers: {
@@ -33,11 +31,11 @@
                 data: {
                     image: dataURL
                 },
-                success: function(r){
+                success: r =>{
                     const d = r.data;
                     resolve({
                         id: d.id,
-                        deleteFunc: function(){ deleteFile(token, d.deletehash) }
+                        deleteFunc: () => deleteFile(token, d.deletehash)
                     });
                 },
                 error: reject
@@ -45,7 +43,7 @@
         });
     }
     function deleteFile(token, dhash){
-        return new Promise(function(resolve, reject){
+        return new Promise((resolve, reject) => {
             $.ajax({
                 dataType: 'json',
                 headers: {
