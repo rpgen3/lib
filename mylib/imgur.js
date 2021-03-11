@@ -2,11 +2,21 @@
     "use strict";
     function load(imgurID){
         return new Promise(function(resolve, reject){
-            $("<img>").on("error", reject).on("load", function(){
-                resolve(this);
-            }).attr({
-                crossOrigin: "anonymous",
-                src: `https://i.imgur.com/${imgurID}.png`
+            const url = "https://i.imgur.com/" + imgurID + ".png";
+            new Promise(function(r){
+                const xhr = new XMLHttpRequest();
+                xhr.onload = function(){
+                    /removed/.test(xhr.responseURL) ? reject() : r();
+                };
+                xhr.open('GET', url);
+                xhr.send();
+            }).then(function(){
+                $("<img>").on("error", reject).on("load", function(){
+                    resolve(this);
+                }).attr({
+                    crossOrigin: "anonymous",
+                    src: url
+                });
             });
         });
     }
