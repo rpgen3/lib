@@ -20,12 +20,12 @@
         });
     }
     function upload(dataURL){
-        const token = 'Client-ID ' + rpgen3.randArray(tokens);
+        const token = rpgen3.randArray(tokens);
         return new Promise((resolve, reject) => {
             $.ajax({
                 dataType: 'json',
                 headers: {
-                    Authorization: token
+                    Authorization: 'Client-ID ' + token
                 },
                 url: "https://api.imgur.com/3/upload.json",
                 type: "POST",
@@ -47,7 +47,7 @@
             $.ajax({
                 dataType: 'json',
                 headers: {
-                    Authorization: token
+                    Authorization: 'Client-ID ' + token
                 },
                 url: "https://api.imgur.com/3/image/" + dhash,
                 type: "DELETE",
