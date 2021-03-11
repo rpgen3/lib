@@ -35,13 +35,13 @@
                     const d = r.data,
                           id = d.id,
                           dhash = d.deletehash;
-                    resolve({ token, id, dhash });
+                    resolve({ id, dhash, token });
                 },
                 error: reject
             });
         });
     }
-    function del({token, dhash}){
+    function del({dhash, token}){
         return new Promise((resolve, reject) => {
             $.ajax({
                 dataType: 'json',
