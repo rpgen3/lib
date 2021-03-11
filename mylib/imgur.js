@@ -6,6 +6,7 @@
             new Promise(r => {
                 const xhr = new XMLHttpRequest();
                 xhr.onload = () => /removed/.test(xhr.responseURL) ? reject() : r();
+                xhr.onerror = reject;
                 xhr.open('GET', url);
                 xhr.send();
             }).then(() => {
