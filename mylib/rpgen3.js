@@ -373,13 +373,8 @@
         });
 
         if(p.textarea){ // https://qiita.com/okyawa/items/8c7bee52b203f6956d44
-            if(rpgen3.getBrowser() === "Google Chrome") {
-                var str = elm.val();
-                elm.focus();
-                elm.val('');
-                elm.val(str);
-                elm.blur();
-            }
+            var str = elm.val();
+            elm.focus().val('').val(str).blur();
         }
 
         function change(){
