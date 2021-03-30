@@ -24,19 +24,8 @@
             // "Function","Null","Undefined"
             // "HTMLElement","HTMLDivElement","HTMLSpanElement","HTMLUnknownElement" etc
         },
-        judgeType: function(x, typeName){ // xが指定された型名ならtrueを返す
-            var type = rpgen3.getType(x);
-            switch(rpgen3.getType(typeName)){
-                case "String":
-                    return typeName === type;
-                case "Array":
-                    return typeName.indexOf(type) !== -1;
-                default:
-                    return null;
-            }
-        },
         init: function(param, default_param){ // キーの型が異なる場合default_paramのキーで上書き
-            if(!rpgen3.judgeType(param,"Object")) param = {};
+            if(rpgen3.getType(param) !== "Object") param = {};
             for(var key in default_param){
                 var default_type = rpgen3.getType(default_param[key]);
                 var type = rpgen3.getType(param[key]);
@@ -96,59 +85,9 @@
                 d.getHours() - 9,
                 d.getMinutes(),
                 d.getSeconds()
-            ].map(v=>('00' + v).slice(-2)).join(':');
-        },
-        getBrowser: function(){ // ブラウザの名前を取得
-            var ua = window.navigator.userAgent.toLowerCase();
-            if(ua.indexOf("edge") !== -1 || ua.indexOf("edga") !== -1 || ua.indexOf("edgios") !== -1) {
-                return "Microsoft Edge";
-            }
-            else if (ua.indexOf("opera") !== -1 || ua.indexOf("opr") !== -1) {
-                return "Opera";
-            }
-            else if (ua.indexOf("samsungbrowser") !== -1) {
-                return "Samsung Internet Browser";
-            }
-            else if (ua.indexOf("ucbrowser") !== -1) {
-                return "UC Browser";
-            }
-            else if(ua.indexOf("chrome") !== -1 || ua.indexOf("crios") !== -1) {
-                return "Google Chrome";
-            }
-            else if(ua.indexOf("firefox") !== -1 || ua.indexOf("fxios") !== -1) {
-                return "Mozilla Firefox";
-            }
-            else if(ua.indexOf("safari") !== -1) {
-                return "Safari";
-            }
-            else if (ua.indexOf("msie") !== -1 || ua.indexOf("trident") !== -1) {
-                return "Internet Explorer";
-            }
-            return false;
-        },
-        getOS: function(){ // OSの名前を取得
-            var ua = window.navigator.userAgent.toLowerCase();
-            if(ua.indexOf("windows nt") !== -1) {
-                return "Microsoft Windows";
-            } else if(ua.indexOf("android") !== -1) {
-                return "Android";
-            } else if(ua.indexOf("iphone") !== -1 || ua.indexOf("ipad") !== -1) {
-                return "iOS";
-            } else if(ua.indexOf("mac os x") !== -1) {
-                return "macOS";
-            }
-            return false;
-        },
-        getIP: function(callback){ // IPアドレス等の情報を取得し、callbackの引数に渡す
-            var xhr = new XMLHttpRequest();
-            xhr.open( 'GET', "https://ipinfo.io/?callback=a" );
-            xhr.responseType = 'text';
-            xhr.onload = function(){
-                var m = xhr.response.match(/{.*?}/);
-                if(!m) return;
-                callback(JSON.parse(m[0]));
-            };
-            xhr.send();
+            ].map(function(v){
+                return ('00' + v).slice(-2);
+            }).join(':');
         },
         //------------------------------------------------------------------------------------------------------
         // 文字列操作
@@ -206,23 +145,23 @@
             document.body.removeChild(e);
             return true;
         },
-        download: function(title, str){ // 文字列をテキストファイル形式で保存
-            if(!rpgen3.judgeType(str,"String") || str === '') return false; // 失敗
-            if(!rpgen3.judgeType(title,"String") || title === '') return false; // 失敗
+        download: function(ttl, str){ // 文字列をテキストファイル形式で保存
+            if(rpgen3.getType(str) !== "String" || str === '') return false; // 失敗
+            if(rpgen3.getType(ttl) !== "String" || ttl === '') return false; // 失敗
             var strText = str.replace(/\n/g,'\r\n'); // 改行を置換
             var bom = new Uint8Array([0xEF, 0xBB, 0xBF]);// 文字化け対策
             var blob = new Blob([bom, strText], {type: "text/plain"});
             var a = document.createElement("a");
             a.href = URL.createObjectURL(blob);
             a.target = '_blank';
-            a.download = title + '.txt';
+            a.download = ttl + '.txt';
             a.click();
             return true; // 成功
         },
         //------------------------------------------------------------------------------------------------------
         // データの保存
         makeSaveKey: function(key){ // URLごとに保存する領域を分けるためのキーを作成
-            if(!rpgen3.judgeType(key,"String") || key === '') return false;
+            if(rpgen3.getType(key) !== "String" || key === '') return false;
             var thisURL = location.href.split('?')[0] + '|'; // クエリを除く
             return thisURL + key;
         },
@@ -449,7 +388,7 @@
             if(p.hankaku) v = rpgen3.toHan(v);
             if(v.length > p.max) v = v.slice(0, p.max);
             var re = p.change(v);
-            if(rpgen3.judgeType(re,"String")) v = re;
+            if(rpgen3.getType(re) === "String") v = re;
             elm.val(v);
             if(p.save) rpgen3.save(p.save, v);
         }
@@ -462,9 +401,9 @@
     };
 
     rpgen3.addInputNumber = function(parentNode, param){ // 数値入力欄を追加
-        if(rpgen3.judgeType(param,"Object")){
+        if(rpgen3.getType(param) === "Object"){
             ['value', 'min', 'max'].forEach(function(v){
-                if(rpgen3.judgeType(param[v],"String")) param[v] = Number(param[v]);
+                if(rpgen3.getType(param[v]) === "String") param[v] = Number(param[v]);
             });
         }
         var p = rpgen3.init(param,{
@@ -496,7 +435,7 @@
             else if(n > p.max) n = p.max;
             if(p.int) n = Math.floor(n);
             var re = p.change(n);
-            if(rpgen3.judgeType(re,"Number")) n = re;
+            if(rpgen3.getType(re) === "Number") n = re;
             var v = String(n);
             elm.val(v);
             if(p.save) rpgen3.save(p.save, v);
@@ -510,9 +449,9 @@
     };
 
     rpgen3.addInputRange = function(parentNode, param){ // 数値入力レンジバーを追加
-        if(rpgen3.judgeType(param,"Object")){
+        if(rpgen3.getType(param) === "Object"){
             ['value', 'min', 'max'].forEach(function(v){
-                if(rpgen3.judgeType(param[v],"String")) param[v] = Number(param[v]);
+                if(rpgen3.getType(param[v]) === "String") param[v] = Number(param[v]);
             });
         }
         var p = rpgen3.init(param,{
@@ -541,7 +480,7 @@
             var n = Number(elm.val());
             if(isNaN(n)) n = 0;
             var re = p.change(n);
-            if(rpgen3.judgeType(re,"Number")) n = re;
+            if(rpgen3.get(re) === "Number") n = re;
             var v = String(n);
             elm.val(v);
             if(p.save) rpgen3.save(p.save, v);
@@ -578,7 +517,7 @@
         }
         function change(){
             var re = p.change(flag);
-            if(rpgen3.judgeType(re,"Boolean")) flag = re;
+            if(rpgen3.getType(re) === "Boolean") flag = re;
             elm.css("background-color", flag ? "orange" : "gray");
             check.prop("checked", flag);
             if(p.save) rpgen3.save(p.save, flag ? '1' : '0');
@@ -593,7 +532,7 @@
     rpgen3.addSelect = function(parentNode, param){ // 選択肢を追加
         if(undefined === param.value) param.value = '';
         param.value = String(param.value);
-        if(rpgen3.judgeType(param.list,"Array")){
+        if(rpgen3.getType(param.list) === "Array"){
             var obj = {};
             param.list.forEach(function(v){
                 obj[v] = v;
@@ -621,7 +560,9 @@
             if(p.placeholder !== '') $("<option>",{text:p.placeholder}).val('').hide().appendTo(elm);
             for(var k in p.list) $("<option>",{text:k}).val(String(p.list[k])).appendTo(elm);
             if(v) elm.val(v);
-            if(Object.keys(p.list).map(v=>String(p.list[v])).indexOf(v) === -1) elm.val(elm.children().first().val());
+            if(Object.keys(p.list).map(function(v){
+                return String(p.list[v]);
+            }).indexOf(v) === -1) elm.val(elm.children().first().val());
         }
         elm.hover(updateSelect).on('updateSelect', updateSelect);
 
@@ -632,7 +573,7 @@
         function change(){
             var v = getValue();
             var re = p.change(v);
-            if(rpgen3.judgeType(re,"String")) v = re;
+            if(rpgen3.getType(re) === "String") v = re;
             elm.val(v);
             if(p.save) rpgen3.save(p.save, v);
         }
@@ -652,7 +593,9 @@
         var front = $("<span>").appendTo(parentNode);
         var area = (p.elm || $("<div>")).appendTo(parentNode);
         p.change = function(flag){ // changeはこの関数が使うので設定しても反映されない
-            area[flag ? "show" : "hide"](p.speed,()=>area.find("input,textarea,select").trigger("appear"));
+            area[flag ? "show" : "hide"](p.speed, function(){
+                area.find("input,textarea,select").trigger("appear");
+            });
         }
         if(p.id2 !== '') area.attr('id', p.id2);
         if(p.class2 !== '') area.addClass(p.class2);
