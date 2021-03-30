@@ -1,6 +1,6 @@
 (function(window, undefined){
     "use strict";
-    function strToImg(str){
+    function strToImg(str){ // 文字列をbase64のdataURLに変換
         var ar = [];
         str.split('').forEach(function(c){
             var n = c.charCodeAt();
@@ -31,7 +31,7 @@
         ctx.putImageData(imgData, 0, 0);
         return cv[0].toDataURL("image/png");
     }
-    function imgToStr(img){
+    function imgToStr(img){ // <img>要素を文字列に変換
         var width = img.width,
             height = img.height;
         var cv = $("<canvas>").attr({
