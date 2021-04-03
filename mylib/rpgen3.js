@@ -475,7 +475,7 @@
             var n = Number(elm.val());
             if(isNaN(n)) n = 0;
             var re = p.change(n);
-            if(rpgen3.get(re) === "Number") n = re;
+            if(rpgen3.getType(re) === "Number") n = re;
             var v = String(n);
             elm.val(v);
             if(p.save) rpgen3.save(p.save, v);
