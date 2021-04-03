@@ -34,15 +34,6 @@
             return param;
         },
         //------------------------------------------------------------------------------------------------------
-        // 闇鍋
-        try: function(func){ // 失敗しても処理が止まらないようにfuncを実行する
-            try {
-                func();
-            }
-            catch (err) {
-                console.error(err);
-            }
-        },
         max: function(array){ // 配列から最大値を求める
             return array.reduce(function(a,b){
                 return a > b ? a : b;
@@ -56,12 +47,6 @@
         randInt: function(min, max){ // ランダムな整数を返す
             return Math.floor(Math.random() * Math.abs(max - min + 1)) + min;
         },
-        makeArray: function(num){ // 0からn-1までの連続した数値の配列を返す
-            if(isNaN(num)) return [];
-            var ar = [];
-            for(var i = 0; i < num; i++) ar.push(i);
-            return ar;
-        },
         randArray: function(array){ // 配列のランダムな要素を返す
             return array[Math.floor(Math.random()*array.length)];
         },
@@ -74,9 +59,6 @@
                 array[i] = c;
             }
             return array;
-        },
-        repeat: function(str, num){ // strをnum回繰り返した文字列を返す
-            return new Array(num + 1).join(str);
         },
         getTime: function(n){ // xx:yy:zz の形式で現在時刻の文字列を返す
             if(!n) return new Date().toString().match(/[0-9]{2}:[0-9]{2}:[0-9]{2}/)[0];
@@ -113,7 +95,7 @@
         },
         //------------------------------------------------------------------------------------------------------
         // URL関連
-        makeArrayURL: function(str){ // 与えられた文字列からURL文字列を探し、配列を返す
+        findURL: function(str){ // 与えられた文字列からURL文字列を探し、配列を返す
             var m = str.match(/(https?|ftp)(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)/g);
             return m ? m : [];
         },
@@ -144,19 +126,6 @@
             document.execCommand('copy');
             document.body.removeChild(e);
             return true;
-        },
-        download: function(ttl, str){ // 文字列をテキストファイル形式で保存
-            if(rpgen3.getType(str) !== "String" || str === '') return false; // 失敗
-            if(rpgen3.getType(ttl) !== "String" || ttl === '') return false; // 失敗
-            var strText = str.replace(/\n/g,'\r\n'); // 改行を置換
-            var bom = new Uint8Array([0xEF, 0xBB, 0xBF]);// 文字化け対策
-            var blob = new Blob([bom, strText], {type: "text/plain"});
-            var a = document.createElement("a");
-            a.href = URL.createObjectURL(blob);
-            a.target = '_blank';
-            a.download = ttl + '.txt';
-            a.click();
-            return true; // 成功
         },
         //------------------------------------------------------------------------------------------------------
         // データの保存
@@ -263,10 +232,7 @@
                 return true;
             };
         })()
-        //------------------------------------------------------------------------------------------------------
     };
-    //------------------------------------------------------------------------------------------------------
-    // ########################################################################################################
     // ######## private関数群 ################################################################################################
     // 要素の属性の設定
     function _setAttr(p, elm){ // p: パラメータ, elm: 要素
@@ -342,7 +308,14 @@
             });
         }
     }
-    // ########################################################################################################
+    function _try(func){
+        try {
+            func();
+        }
+        catch (err) {
+            console.error(err);
+        }
+    }
     // ########################################################################################################
     // HTML要素を追加する, 関数の返り値は、入力値を返す関数
     rpgen3.addInputText = function(parentNode, param){ // 文字列入力欄を追加
@@ -388,7 +361,7 @@
             if(p.save) rpgen3.save(p.save, v);
         }
         elm.on("change", change);
-        rpgen3.try(change);
+        _try(change);
 
         return function(){
             return elm.val();
@@ -436,7 +409,7 @@
             if(p.save) rpgen3.save(p.save, v);
         }
         elm.on("change", change);
-        rpgen3.try(change);
+        _try(change);
 
         return function(){
             return Number(elm.val());
@@ -481,7 +454,7 @@
             if(p.save) rpgen3.save(p.save, v);
         }
         elm.on("change", change);
-        rpgen3.try(change);
+        _try(change);
 
         return function(){
             return Number(elm.val());
@@ -517,7 +490,7 @@
             check.prop("checked", flag);
             if(p.save) rpgen3.save(p.save, flag ? '1' : '0');
         }
-        rpgen3.try(change);
+        _try(change);
 
         return function(){
             return flag;
@@ -573,7 +546,7 @@
             if(p.save) rpgen3.save(p.save, v);
         }
         elm.on("change", change);
-        rpgen3.try(change);
+        _try(change);
 
         updateSelect();
 
@@ -626,10 +599,6 @@
         };
     };
     //------------------------------------------------------------------------------------------------------
-    //------------------------------------------------------------------------------------------------------
-    //------------------------------------------------------------------------------------------------------
-    //------------------------------------------------------------------------------------------------------
-    //------------------------------------------------------------------------------------------------------
     rpgen3.baseN = function(base){ // N進数を作成するクラス,baseは重複のない文字列
         if(typeof base !== "string") return false; // error
         var len = base.length;
@@ -676,7 +645,7 @@
                     var str = to58.encode(v.charCodeAt(0));
                     if(str.length > 3) return ''; // 58**3以上のユニコードは空文字
                     var len = str.length;
-                    return SIGN[len] + (rpgen3.repeat('0',len) + str).slice(-len) + SIGN[len];
+                    return SIGN[len] + ('0'.repeat(len) + str).slice(-len) + SIGN[len];
                 }
             }).join('').replace(/(W|X|Y|Z)\1/g,'').replace(/(W|X|Y|Z)(?=(W|X|Y|Z))/g,'').slice(0,-1).replace(/^W/,'');
         };
@@ -692,7 +661,6 @@
             });
         };
     })();
-    //------------------------------------------------------------------------------------------------------
     //------------------------------------------------------------------------------------------------------
     window.rpgen3 = rpgen3;
 })(typeof window === 'object' ? window : this);
