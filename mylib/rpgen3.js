@@ -112,7 +112,7 @@
         },
         toParam: function(json){ // 連想配列をクエリパラメータ形式に
             var a = [];
-            for(const k in json) a.push(`${k}=${json[k]}`);
+            for(var k in json) a.push(`${k}=${json[k]}`);
             return a.join('&');
         },
         copy: function(str){ // 文字列をクリップボードにコピー
