@@ -544,7 +544,7 @@
         _try(change);
 
         updateSelect();
-        elm.val(String(p.value));
+        if(p.value) elm.val(String(p.value));
 
         return getValue;
     };
