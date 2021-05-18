@@ -34,15 +34,15 @@ const _sign = 'WXYZ';
 export const encode = str => str.split('').map(v=>{
     if(_to58.base.indexOf(v) !== -1) return _sign[0] + v + _sign[0];
     else {
-        const s = _to58.encode(v.charCodeAt(0));
-        if(s.length > 3) return ''; // 58**3以上のユニコードは空文字
-        const len = s.length;
+        const s = _to58.encode(v.charCodeAt(0)),
+              len = s.length;
+        if(len > 3) return ''; // 58**3以上のユニコードは空文字
         return _sign[len] + ('0'.repeat(len) + s).slice(-len) + _sign[len];
     }
 }).join('').replace(/(W|X|Y|Z)\1/g,'').replace(/(W|X|Y|Z)(?=(W|X|Y|Z))/g,'').slice(0,-1).replace(/^W/,'');
 export const decode = str => str.replace(/(W|X|Y|Z)[^WXYZ]*/g, v=>{
-    var s = v.slice(1);
-    var idx = _sign.indexOf(v[0]);
+    const s = v.slice(1),
+          idx = _sign.indexOf(v[0]);
     if(!idx) return s;
     return s.replace(new RegExp(".{"+idx+"}",'g'), n=>String.fromCharCode(_to58.decode(n)));
 });
