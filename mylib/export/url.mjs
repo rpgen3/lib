@@ -6,12 +6,10 @@ export const getDomain = url => (url || location.href).replace(/^.+?\/\/|\/.*$/g
 export const getParam = url => { // URLのクエリパラメータを連想配列形式に
     const p = {},
           q = (url || location.href).split('?');
-    if(q[1]) {
-        q[1].split('&').forEach(v=>{
-            const a = v.split('=');
-            if(a.length === 2) p[a[0]] = a[1];
-        });
-    }
+    q[1].split('&').forEach(v=>{
+        const a = v.split('=');
+        if(a.length === 2) p[a[0]] = a[1];
+    });
     return p;
 };
 export const toParam = json => Object.keys(json).map(v=>v + '=' + json[v]).join('&'); // 連想配列をクエリパラメータ形式に
