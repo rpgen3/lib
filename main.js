@@ -1,7 +1,15 @@
 (async()=>{
     await import('https://rpgen3.github.io/lib/lib/jquery-3.5.1.min.js');
-    const rpgen3 = await(await import("https://rpgen3.github.io/lib/mylib/export/import.mjs")).all();
-    window.rpgen3 = rpgen3;
+    const rpgen3 = await Promise.all([
+        'baseN',
+        'css',
+        'hankaku',
+        'random',
+        'save',
+        'url',
+        'useful'
+    ].map(v=>import(`https://rpgen3.github.io/lib/mylib/export/${v}.mjs`))).then(v=>Object.assign({},...v));
+    window.rpgen4 = rpgen3;
     const h = $("<div>").appendTo($("body")).css({
         "text-align": "center",
         padding: "1em"
