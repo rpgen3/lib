@@ -21,10 +21,12 @@ export class BaseN {
         return String(str).split('').reverse().map((v,i)=>base.indexOf(v)*Math.pow(len, i)).reduce((acc,v)=>acc+v);
     }
 }
-// 0~9 a~z A~V → 無変換、左端にWを追加する
-// 58進数の一桁、左端にXを追加する
-// 58進数の二桁、左端にYを追加する
-// 58進数の三桁、左端にZを追加する
+/*
+0~9 a~z A~V → 無変換、左端にWを追加する
+58進数の一桁、左端にXを追加する
+58進数の二桁、左端にYを追加する
+58進数の三桁、左端にZを追加する
+*/
 const _to58 = new BaseN([ // 58進数
     '0123456789',
     'abcdefghijklmnopqrstuvwxyz',
