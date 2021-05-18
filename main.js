@@ -1,14 +1,6 @@
 (async()=>{
     await import('https://rpgen3.github.io/lib/lib/jquery-3.5.1.min.js');
-    const rpgen3 = await(await import("https://rpgen3.github.io/lib/mylib/export/import.mjs")).default([
-        'baseN',
-        'css',
-        'hankaku',
-        'random',
-        'save',
-        'url',
-        'useful'
-    ]);
+    const rpgen3 = await(await import("https://rpgen3.github.io/lib/mylib/export/import.mjs")).all();
     window.rpgen3 = rpgen3;
     const h = $("<div>").appendTo($("body")).css({
         "text-align": "center",
