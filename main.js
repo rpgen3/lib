@@ -1,4 +1,4 @@
-async (()=>{
+(async()=>{
     await import('https://rpgen3.github.io/lib/lib/jquery-3.5.1.min.js');
     const rpgen3 = await import('https://rpgen3.github.io/lib/mylib/export/random.mjs');
     const { randInt, randArr, shuffle } = await import('https://rpgen3.github.io/lib/mylib/export/random.mjs');
