@@ -28,7 +28,7 @@ export const imgToStr = img => { // <img>要素を文字列に変換
     const { width, height } = img,
           cv = document.createElement("canvas");
     cv.width = width;
-    cv.height = width;
+    cv.height = height;
     const ctx = cv.getContext('2d');
     ctx.drawImage(img,0,0);
     const data = ctx.getImageData(0, 0, width, height).data,
