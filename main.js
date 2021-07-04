@@ -1,7 +1,7 @@
 (()=>{
-    const h = $("<div>").appendTo($("body")).css({
-        "text-align": "center",
-        padding: "1em"
+    const h = $('body').css({
+        'text-align': 'center',
+        padding: '1em'
     });
     $("<h1>").appendTo(h).text("ES2020以前");
     $("<button>").appendTo(h).text("randInt").on("click",()=>{
